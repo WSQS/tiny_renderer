@@ -1,116 +1,121 @@
 #pragma once
 #include <iostream>
 #include <cmath>
+#include <functional>
+#include <algorithm>
 class Matrix;
+template<class T, uint size>
+class Vec;
+
 template<class T>
-class Vec3;
+using Vec2 = Vec<T, 2>;
+template<class T>
+using Vec3 = Vec<T, 3>;
 
-template <class T>
-class Vec2
-{
+template<class T, uint size>
+class Vec {
 public:
-    union {
-        struct {
-            T x, y;
-        };
+    std::array<T, size> data;
 
-        struct {
-            T u, v;
-        };
-
-        struct {
-            T a, b;
-        };
-
-        T data[2];
-    };
-
-    Vec2() : x(0), y(0) {
+    Vec(std::initializer_list<T> init): data(init) {
     }
 
-    Vec2(T x, T y) : a(x), b(y) {
+    template<typename TV>
+    Vec for_each(const Vec<TV, size> &V, std::function<T(const T &, const TV &)> input_function) {
+        Vec result;
+        for (int i = 0; i < size; i++) {
+            result.data[i] = input_function(this->data[i], V.data[i]);
+        }
+        return result;
     }
 
-    explicit Vec2(Vec3<T> Vec);
+    Vec map(std::function<T(const T &)> input_function) const {
+        Vec result{*this};
+        std::for_each(result.data.begin(), result.data.end(), input_function);
+        return result;
+    }
 
-    template<class U>
-    explicit Vec2(Vec2<U> Vec);
+    template<typename TV>
+    Vec operator+(const Vec<TV, size> &v) const {
+        return for_each(v, [](const T &x, const TV &y) { return x + y; });
+    }
 
-    Vec2 operator+(const Vec2 &V) const { return Vec2<T>(x + V.x, y + V.y); }
-    Vec2 operator-(const Vec2 &V) { return Vec2<T>(x - V.x, y - V.y); }
-    T operator*(const Vec2 &V) { return x * V.x + y * V.y; }
-    Vec2 operator*(const T &r) { return Vec2<T>(x * r, y * r); }
+    template<typename TV>
+    Vec operator-(const Vec<TV, size> &v) const {
+        return for_each(v, [](const T &x, const TV &y) { return x - y; });
+    }
+
+    template<typename TV>
+    Vec operator*(const TV &v) const {
+        return map([v](const T &x) { return x * v; });
+    }
+
     T &operator[](unsigned const int i) { return data[i]; }
-    bool operator==(const Vec2 &V) { return x == V.x && y == V.y; }
-    static Vec2 max(const Vec2 &a, const Vec2 &b) { return {std::max(a.x, b.x), std::max(a.y, b.y)}; }
-    static Vec2 max(const Vec2 &a, const Vec2 &b, const Vec2 &c) { return max(max(a, b), c); }
-    static Vec2 min(const Vec2 &a, const Vec2 &b) { return {std::min(a.x, b.x), std::min(a.y, b.y)}; }
-    static Vec2 min(const Vec2 &a, const Vec2 &b, const Vec2 &c) { return min(min(a, b), c); }
 
-    friend std::ostream &operator<<(std::ostream &s, const Vec2<T> &V) { return s << "(" << V.x << ", " << V.y << ")"; }
+    bool operator==(const Vec &V) {
+        for (int i = 0; i < size; i++) {
+            if (data[i] != V.data[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    auto get_size() const {
+        T value{};
+        map([&value](const T &x) {
+            value += x * x;
+            return 0;
+        });
+        return sqrt(value);
+    }
+
+    auto normalize() {
+        return *this / get_size();
+    }
+
+    static Vec max(const Vec &a, const Vec &b) {
+        return a.for_each(b, std::max);
+    }
+
+    template<typename... Args>
+    static Vec max(const Vec &first, const Args &... rest) {
+        return max(first, max(rest...));
+    }
+
+    static Vec min(const Vec &a, const Vec &b) {
+        return a.for_each(b, std::min);
+    }
+
+    template<typename... Args>
+    static Vec min(const Vec &first, const Args &... rest) {
+        return max(first, min(rest...));
+    }
+
+    friend std::ostream &operator<<(std::ostream &s, const Vec &V) {
+        s << "(";
+        V.for_each([&s](const T &x) {
+            s << x << ", ";
+        });
+        return s << ")";
+    }
+
+    static Vec ParallelDot(const Vec &V1, const Vec &V2) {
+        return V1.for_each(V2, [](const T &a, const T &b) {
+            return a * b;
+        });
+    }
+
+    template<typename TV>
+    friend auto operator^(Vec3<TV>, Vec3<TV>) {
+        return Vec<TV, 3>();
+    }
 };
+
 
 typedef Vec2<int> Vec2i;
 typedef Vec2<float> Vec2f;
 
-template<class T>
-class Vec3 {
-public:
-    union {
-        struct {
-            T x, y, z;
-        };
-
-        struct {
-            T a, b, c;
-        };
-
-        T data[3];
-    };
-
-    Vec3() : x(0), y(0), z(0) {
-    }
-
-    Vec3(T x, T y, T z) : a(x), b(y), c(z) {
-    }
-
-    explicit Vec3(const Matrix &M);
-
-    template<class U>
-    explicit Vec3(Vec3<U> Vec);
-
-    Vec3 operator+(const Vec3 &V) { return Vec3<T>(x + V.x, y + V.y, z + V.z); }
-    Vec3 operator-(const Vec3 &V) const { return Vec3<T>(x - V.x, y - V.y, z - V.z); }
-    T operator*(const Vec3 &V) { return x * V.x + y * V.y + z * V.z; }
-
-    T GetPhi() const;
-
-    Vec3 operator*(const T &r) { return Vec3<T>(x * r, y * r, z * r); }
-    Vec3 operator/(const T &r) { return Vec3<T>(x / r, y / r, z / r); }
-
-    Vec3 operator^(const Vec3 &V) const {
-        // std::cout << y * V.z - z * V.y << std::endl;
-        return Vec3<T>(y * V.z - z * V.y, z * V.x - x * V.z, x * V.y - y * V.x);
-    }
-
-    inline T &operator[](unsigned const int i) { return data[i]; }
-    bool operator==(const Vec3 &V) { return x == V.x && y == V.y && z == V.z; }
-
-    Vec3 &normalize(T l = 1) {
-        *this = (*this) * (l / std::sqrt(x * x + y * y + z * z));
-        return *this;
-    }
-
-    T sum() { return x + y + z; }
-
-    static Vec3 ParallelDot(const Vec3 &V1, const Vec3 &V2) { return {V1.x * V2.x, V1.y * V2.y, V1.z * V2.z}; }
-
-    friend std::ostream &operator<<(std::ostream &s, const Vec3<T> &V) {
-        return s << "(" << V.x << ", " << V.y << ", " << V.z << ")";
-    }
-
-    friend Vec3<T> operator*(const T &r, const Vec3 &V) { return Vec3<T>(V.x * r, V.y * r, V.z * r); }
-};
 
 typedef Vec3<int> Vec3i;
 typedef Vec3<float> Vec3f;
