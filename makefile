@@ -10,6 +10,9 @@ OBJECTS := $(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
 all: $(TARGET)
 
+$(DESTDIR):
+	mkdir -p $(DESTDIR)
+
 $(TARGET): $(OBJECTS)
 	$(SYSCONF_LINK) -Wall $(LDFLAGS) -o $(TARGET) $(addprefix $(DESTDIR), $(OBJECTS)) $(LIBS)
 
