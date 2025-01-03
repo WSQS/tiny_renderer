@@ -8,7 +8,7 @@
 #include "tgaimage.h"
 
 Model* model;
-const Vec3f light_dir = Vec3f{1, 0, 1}.normalize(); // define light_direction
+const Vec3f light_dir = Vec3f(1, 0, 1).normalize(); // define light_direction
 
 class GouraudShader : public IShader
 {

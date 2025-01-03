@@ -7,7 +7,7 @@ int height = 800;
 
 Vec3f barycentric_coord1(Vec3f *pts, Vec2i p)
 {
-    Vec3f x{pts[0].x - p.x, pts[1].x - p.x, pts[2].x - p.x}, y{pts[0].y - p.y, pts[1].y - p.y, pts[2].y - p.y};
+    Vec3f x(pts[0].x - p.x, pts[1].x - p.x, pts[2].x - p.x), y(pts[0].y - p.y, pts[1].y - p.y, pts[2].y - p.y);
     Vec3f a = x ^ y;
     a.normalize();
     return a;
