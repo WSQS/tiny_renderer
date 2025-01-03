@@ -16,7 +16,7 @@ $(DESTDIR):
 $(TARGET): $(OBJECTS)
 	$(SYSCONF_LINK) -Wall $(LDFLAGS) -o $(TARGET) $(addprefix $(DESTDIR), $(OBJECTS)) $(LIBS)
 
-$(OBJECTS): %.o: %.cpp
+$(OBJECTS): %.o: %.cpp | $(DESTDIR)
 	$(SYSCONF_LINK) -Wall $(CPPFLAGS) -c $(CFLAGS) $< -o $(DESTDIR)$@
 
 run: $(TARGET)
