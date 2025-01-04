@@ -68,7 +68,7 @@ int main(const int argc, char **argv) {
         Vec3f screen_coords[3];
         for (int j = 0; j < 3; j++)
             screen_coords[j] = static_cast<Vec3f>(shader->vertex(i, j));
-        triangle(screen_coords, shader.get(), image, Z_Buffer);
+        triangle(screen_coords, shader, image, Z_Buffer);
     }
     // image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
     image.write_tga_file("output.tga");

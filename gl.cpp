@@ -2,6 +2,8 @@
 #include "const.h"
 #include "tgaimage.h"
 
+#include <memory>
+
 Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
     Vec3f x{pts[0].get(0, 0) - p.get(0, 0), pts[1].get(0, 0) - p.get(0, 0),
             pts[2].get(0, 0) - p.get(0, 0)},
@@ -48,7 +50,7 @@ void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensi
     }
 }
 
-void triangle(Vec3f *points, IShader *Shader, TGAImage &image, float *Z_Buff) {
+void triangle(Vec3f *points, std::shared_ptr<IShader> Shader, TGAImage &image, float *Z_Buff) {
     Vec2f Points2d[3], ScreenSize{width / 2, height / 2};
     for (int i = 0; i < 3; i++) {
         points[i] = points[i] * GetPhi(points[i]);

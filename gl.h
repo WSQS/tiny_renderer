@@ -3,8 +3,9 @@
 #include "geometry.h"
 #include "tgaimage.h"
 
-class IShader
-{
+#include <memory>
+
+class IShader {
 public:
     virtual ~IShader() = default;
     /// @brief vertex shader
@@ -16,9 +17,9 @@ public:
     /// @param bar the coordinate of the point
     /// @param color the color of point
     /// @return should the point be rendered
-    virtual bool fragment(Vec3f bar, TGAColor& color) = 0;
+    virtual bool fragment(Vec3f bar, TGAColor &color) = 0;
 };
 
-void triangle(Vec3f* points, float* Z_Buff, TGAImage& image, Vec3f intensity);
-void triangle(Vec3f* points, IShader* Shader, TGAImage& image, float* Z_Buff);
-void line(Vec2i a, Vec2i b, TGAImage& image, TGAColor color);
+void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, Vec3f intensity);
+void triangle(Vec3f *points, std::shared_ptr<IShader> Shader, TGAImage &image, float *Z_Buff);
+void line(Vec2i a, Vec2i b, TGAImage &image, TGAColor color);
