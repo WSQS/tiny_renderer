@@ -86,9 +86,9 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     auto GetPhi() { return 0; }
     static auto ParallelDot(Matrix a, Matrix b) { return a; }
     static auto min(Matrix a, Matrix b) { return a; }
-    static auto min(Matrix a, Matrix b, Matrix c) { return a; }
+    static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a,b),c); }
     static auto max(Matrix a, Matrix b) { return a; }
-    static auto max(Matrix a, Matrix b, Matrix c) { return a; }
+    static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a,b),c); }
 };
 
 using Vec2f = Matrix<float, 2, 1>;
