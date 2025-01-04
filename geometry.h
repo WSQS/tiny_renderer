@@ -21,7 +21,7 @@ public:
     Matrix(std::initializer_list<T> list) {
         static_assert(col == 1, "col must be 1");
         std::transform(list.begin(), list.end(), data.begin(),
-                       [](const T &x) { return std::array<T, col>{x}; });
+            [](const T &x) { return std::array<T, col>{x}; });
     }
     static Matrix merge(std::initializer_list<Matrix<T, row, 1>> list) {
         Matrix result{};
@@ -47,45 +47,45 @@ public:
         return result;
     }
     template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-    friend Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml,
-                                            const Matrix<T_, t_, col_> &mr);
+    friend Matrix<T_, row_, col_> operator*(
+        const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     template <typename T_, uint8 row_>
-    friend Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml,
-                                         const Matrix<T_, row_, 1> &mr);
+    friend Matrix<T_, row_, 1> operator^(
+        const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     Matrix operator/(const T &a) const {
         Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), result.data.begin(),
-                       [a](const std::array<T, col> &r1) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), result.begin(),
-                                          [a](const T &x) { return x / a; });
-                           return result;
-                       });
+            [a](const std::array<T, col> &r1) {
+                std::array<T, col> result;
+                std::transform(
+                    r1.begin(), r1.end(), result.begin(), [a](const T &x) { return x / a; });
+                return result;
+            });
         return result;
     }
     Matrix operator-(const Matrix &m) const {
         Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
-                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
-                                          [](const T &x, const T &y) { return x - y; });
-                           return result;
-                       });
+            [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                std::array<T, col> result;
+                std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                    [](const T &x, const T &y) { return x - y; });
+                return result;
+            });
         return result;
     }
 
     Matrix operator+(const Matrix &m) const {
         Matrix result{*this};
         std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
-                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
-                                          [](const T &x, const T &y) { return x + y; });
-                           return result;
-                       });
+            [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                std::array<T, col> result;
+                std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                    [](const T &x, const T &y) { return x + y; });
+                return result;
+            });
         return result;
     }
     Matrix normalize() {
@@ -97,8 +97,8 @@ public:
         return *this / result;
     }
     template <typename T_, uint8 row_>
-    friend Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml,
-                                         const Matrix<T_, row_, 1> &mr);
+    friend Matrix<T_, row_, 1> operator^(
+        const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     auto &get(uint8 i, uint8 j) { return data[i][j]; }
     auto get(uint8 i, uint8 j) const { return data[i][j]; }
     T sum() {
@@ -111,35 +111,35 @@ public:
     static Matrix ParallelDot(Matrix a, Matrix b) {
         Matrix result{};
         std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
-                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
-                                          [](const T &x, const T &y) { return x * y; });
-                           return result;
-                       });
+            [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                std::array<T, col> result;
+                std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                    [](const T &x, const T &y) { return x * y; });
+                return result;
+            });
         return result;
     }
     static auto min(Matrix a, Matrix b) {
         Matrix result{};
         std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
-                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
-                                          [](const T &x, const T &y) { return std::min(x, y); });
-                           return result;
-                       });
+            [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                std::array<T, col> result;
+                std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                    [](const T &x, const T &y) { return std::min(x, y); });
+                return result;
+            });
         return result;
     }
     static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a, b), c); }
     static auto max(Matrix a, Matrix b) {
         Matrix result{};
         std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
-                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
-                           std::array<T, col> result;
-                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
-                                          [](const T &x, const T &y) { return std::max(x, y); });
-                           return result;
-                       });
+            [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                std::array<T, col> result;
+                std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                    [](const T &x, const T &y) { return std::max(x, y); });
+                return result;
+            });
         return result;
     }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
@@ -171,6 +171,6 @@ Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_
 template <typename T_, uint8 row_>
 Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     return {ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0),
-            ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
-            ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};
+        ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
+        ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};
 }

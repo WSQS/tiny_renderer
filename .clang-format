@@ -2,7 +2,7 @@
 Language:        Cpp
 # BasedOnStyle:  clang-format
 AccessModifierOffset: -4
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: DontAlign
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments:
   Enabled:         false
