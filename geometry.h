@@ -18,7 +18,11 @@ template <typename T, uint8 row, uint8 col> class Matrix {
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].data[j][0];
     }
-    template <typename T_> Matrix(Matrix<T_, row, col> list) : data{} {}
+    template <typename T_> Matrix(Matrix<T_, row, col> list) : data{} {
+        for (uint8 i = 0; i < row; i++)
+            for (uint8 j = 0; j < col; j++)
+                data[i][j] = list.data[i][j];
+    }
     Matrix operator*(const int &a) {
         std::for_each(data.begin(), data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x * a; });
