@@ -60,6 +60,13 @@ template <typename T, uint8 row, uint8 col> class Matrix {
 
     Matrix operator+(const Matrix &m) const {
         Matrix result{*this};
+        std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
+                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                                          [](const T &x, const T &y) { return x + y; });
+                           return result;
+                       });
         return result;
     }
     Matrix normalize() { return *this; }
