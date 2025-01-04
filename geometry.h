@@ -46,14 +46,6 @@ public:
         });
         return result;
     }
-    template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-    friend Matrix<T_, row_, col_> operator*(
-        const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr);
-    template <typename T_, uint8 row_>
-    friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
-    template <typename T_, uint8 row_>
-    friend Matrix<T_, row_, 1> operator^(
-        const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     Matrix operator/(const T &a) const {
         Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), result.data.begin(),
@@ -143,6 +135,14 @@ public:
         return result;
     }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
+    template <typename T_, uint8 row_, uint8 t_, uint8 col_>
+    friend Matrix<T_, row_, col_> operator*(
+        const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr);
+    template <typename T_, uint8 row_>
+    friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
+    template <typename T_, uint8 row_>
+    friend Matrix<T_, row_, 1> operator^(
+        const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
 };
 
 using Vec2f = Matrix<float, 2, 1>;
