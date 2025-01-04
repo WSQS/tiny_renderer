@@ -18,8 +18,7 @@ public:
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].begin()[j];
     }
-    Matrix(std::initializer_list<T> list) {
-        static_assert(col == 1, "col must be 1");
+    Matrix(std::initializer_list<T> list) requires (col == 1) {
         std::transform(list.begin(), list.end(), data.begin(),
             [](const T &x) { return std::array<T, col>{x}; });
     }
