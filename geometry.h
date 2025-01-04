@@ -14,7 +14,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     Matrix(std::array<std::array<T, col>, row> data) : data(data) {}
     Matrix(std::initializer_list<std::initializer_list<T>> list) : data{} {}
     Matrix(std::initializer_list<Matrix<T, row, 1>> list) {
-        for (uint8 i = 0; i < std::min(row,static_cast<uint8>(list.size())); i++)
+        for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].data[j][0];
     }
@@ -76,7 +76,13 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     }
     auto &get(uint8 i, uint8 j) { return data[i][j]; }
     auto get(uint8 i, uint8 j) const { return data[i][j]; }
-    auto sum() { return 0; }
+    T sum() {
+        T result{};
+        for (auto r : data)
+            for (auto c : r)
+                result += c;
+        return result;
+    }
     auto GetPhi() { return 0; }
     static auto ParallelDot(Matrix a, Matrix b) { return a; }
     static auto min(Matrix a, Matrix b) { return a; }
