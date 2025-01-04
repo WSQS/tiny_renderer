@@ -1,5 +1,6 @@
 main
-# *.tga
+*.tga
 *.o
 *.out
 bin
+.idea
