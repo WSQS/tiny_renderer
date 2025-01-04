@@ -14,7 +14,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     Matrix(std::array<std::array<T, col>, row> data) : data(data) {}
     Matrix(std::initializer_list<std::initializer_list<T>> list) : data{} {}
     Matrix(std::initializer_list<Matrix<T, row, 1>> list) {
-        for (uint8 i = 0; i < row; i++)
+        for (uint8 i = 0; i < std::min(row,static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].data[j][0];
     }
@@ -48,6 +48,13 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     }
     Matrix operator-(const Matrix &m) const {
         Matrix result{*this};
+        std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
+                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                                          [](const T &x, const T &y) { return x - y; });
+                           return result;
+                       });
         return result;
     }
 
