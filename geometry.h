@@ -84,11 +84,15 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         return result;
     }
     auto GetPhi() { return 0; }
-    static T ParallelDot(Matrix a, Matrix b) {
-        T result{};
-        for (uint8 i = 0; i < row; i++)
-            for (uint8 j = 0; j < col; j++)
-                result += a.data[i][j] * b.data[i][j];
+    static Matrix ParallelDot(Matrix a, Matrix b) {
+        Matrix result{};
+        std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
+                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                                          [](const T &x, const T &y) { return x * y; });
+                           return result;
+                       });
         return result;
     }
     static auto min(Matrix a, Matrix b) { return a; }
