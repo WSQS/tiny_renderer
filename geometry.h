@@ -44,6 +44,9 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                                             const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
+    template <typename T_, uint8 row_>
+    friend Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml,
+                                         const Matrix<T_, row_, 1> &mr);
     Matrix operator/(const T &a) const {
         Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), result.data.begin(),
@@ -89,10 +92,6 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     template <typename T_, uint8 row_>
     friend Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml,
                                          const Matrix<T_, row_, 1> &mr);
-    Matrix operator^(const Matrix &m) const {
-        Matrix result{*this};
-        return result;
-    }
     auto &get(uint8 i, uint8 j) { return data[i][j]; }
     auto get(uint8 i, uint8 j) const { return data[i][j]; }
     T sum() {
@@ -165,7 +164,7 @@ Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_
 
 template <typename T_, uint8 row_>
 Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
-    return {ml.data.get(1, 0) * mr.data.get(2, 0) - ml.data.get(2, 0) * mr.data.get(1, 0),
-            ml.data.get(2, 0) * mr.data.get(0, 0) - ml.data.get(0, 0) * mr.data.get(2, 0),
-            ml.data.get(0, 0) * mr.data.get(1, 0) - ml.data.get(1, 0) * ml.data.get(0, 0)};
+    return {{ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0)},
+            {ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0)},
+            {ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * ml.get(0, 0)}};
 }
