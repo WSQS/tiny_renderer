@@ -13,7 +13,6 @@ template <typename T, uint8 row, uint8 col> class Matrix {
 
     Matrix() = default;
     Matrix(const Matrix &m) { std::copy(m.data.begin(), m.data.end(), data.begin()); }
-    Matrix(std::array<std::array<T, col>, row> data) : data(data) {}
     Matrix(std::initializer_list<std::initializer_list<T>> list) {
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
