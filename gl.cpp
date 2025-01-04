@@ -3,12 +3,10 @@
 #include "tgaimage.h"
 
 Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
-    Vec3f x{{pts[0].get(0, 0) - p.get(0, 0)},
-            {pts[1].get(0, 0) - p.get(0, 0)},
-            {pts[2].get(0, 0) - p.get(0, 0)}},
-        y{{pts[0].get(1, 0) - p.get(1, 0)},
-          {pts[1].get(1, 0) - p.get(1, 0)},
-          {pts[2].get(1, 0) - p.get(1, 0)}};
+    Vec3f x{pts[0].get(0, 0) - p.get(0, 0), pts[1].get(0, 0) - p.get(0, 0),
+            pts[2].get(0, 0) - p.get(0, 0)},
+        y{pts[0].get(1, 0) - p.get(1, 0), pts[1].get(1, 0) - p.get(1, 0),
+          pts[2].get(1, 0) - p.get(1, 0)};
     Vec3f a = x ^ y;
     a = a / a.sum();
     return a;
@@ -16,7 +14,7 @@ Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
 
 // rasterizer
 void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensity) {
-    Vec2f Points2d[3], ScreenSize{{width / 2}, {height / 2}};
+    Vec2f Points2d[3], ScreenSize{width / 2, height / 2};
     for (int i = 0; i < 3; i++) {
         points[i] = points[i] * GetPhi(points[i]);
         Points2d[i] = static_cast<Vec2f>(points[i]);
@@ -29,12 +27,12 @@ void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensi
     for (int x = left_bottom.get(0, 0); x <= right_top.get(0, 0); x++) {
         for (int y = left_bottom.get(1, 0); y <= right_top.get(1, 0); y++) {
             // fragment shader
-            Vec3f k = barycentric_coord(points, Vec2i{{x}, {y}});
+            Vec3f k = barycentric_coord(points, Vec2i{x, y});
             if (k.get(0, 0) < 0 || k.get(1, 0) < 0 || k.get(2, 0) < 0)
                 continue;
             const float Z =
-                k * Vec3f{{points[0].get(2, 0)}, {points[1].get(2, 0)}, {points[2].get(2, 0)}};
-            const Vec2i p0{Vec2i{{x}, {y}} + static_cast<Vec2i>(ScreenSize)};
+                k * Vec3f{points[0].get(2, 0), points[1].get(2, 0), points[2].get(2, 0)};
+            const Vec2i p0{Vec2i{x, y} + static_cast<Vec2i>(ScreenSize)};
             float inten = k * intensity;
             inten = std::max(0.0f, inten);
             // std::cout << p0 << k << '\t' << intensity << '\t' << inten << std::endl;
@@ -51,7 +49,7 @@ void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensi
 }
 
 void triangle(Vec3f *points, IShader *Shader, TGAImage &image, float *Z_Buff) {
-    Vec2f Points2d[3], ScreenSize{{width / 2}, {height / 2}};
+    Vec2f Points2d[3], ScreenSize{width / 2, height / 2};
     for (int i = 0; i < 3; i++) {
         points[i] = points[i] * GetPhi(points[i]);
         Points2d[i] = static_cast<Vec2f>(points[i]);
@@ -64,12 +62,12 @@ void triangle(Vec3f *points, IShader *Shader, TGAImage &image, float *Z_Buff) {
     for (int x = left_bottom.get(0, 0); x <= right_top.get(0, 0); x++) {
         for (int y = left_bottom.get(1, 0); y <= right_top.get(1, 0); y++) {
             // fragment shader
-            Vec3f k = barycentric_coord(points, Vec2i{{x}, {y}});
+            Vec3f k = barycentric_coord(points, Vec2i{x, y});
             if (k.get(0, 0) < 0 || k.get(1, 0) < 0 || k.get(2, 0) < 0)
                 continue;
             const float Z =
-                k * Vec3f{{points[0].get(2, 0)}, {points[1].get(2, 0)}, {points[2].get(2, 0)}};
-            const Vec2i p0{Vec2i{{x}, {y}} + static_cast<Vec2i>(ScreenSize)};
+                k * Vec3f{points[0].get(2, 0), points[1].get(2, 0), points[2].get(2, 0)};
+            const Vec2i p0{Vec2i{x, y} + static_cast<Vec2i>(ScreenSize)};
             TGAColor Color;
             if (Z >= Z_Buff[p0.get(0, 0) + p0.get(1, 0) * width] && Shader->fragment(k, Color)) {
                 Z_Buff[p0.get(0, 0) + p0.get(1, 0) * width] = Z;

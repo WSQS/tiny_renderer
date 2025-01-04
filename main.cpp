@@ -8,7 +8,7 @@
 #include "tgaimage.h"
 
 Model *model;
-const Vec3f light_dir = Vec3f{{1}, {0}, {1}}.normalize(); // define light_direction
+const Vec3f light_dir = Vec3f{1, 0, 1}.normalize(); // define light_direction
 
 class GouraudShader : public IShader {
     Vec3f VaryingIntensity; // written by vertex shader, read by fragment shader
@@ -25,15 +25,15 @@ class GouraudShader : public IShader {
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
         // TODO:待矩阵化
         gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
-        gl_Vertex = (gl_Vertex + Vec3f{{0}, {0}, {1.f}}) / 2.f;
-        gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{{width}, {height}, {depth}});
+        gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
+        gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{width, height, depth});
         gl_Vertex = gl_Vertex * GetPhi(gl_Vertex);
         return static_cast<Vec3i>(gl_Vertex); // transform it to screen coordinates
     }
 
     bool fragment(Vec3f bar, TGAColor &color) override {
         float intensity = VaryingIntensity * bar; // interpolate intensity for the current pixel
-        Vec2i uv{{static_cast<int>(VaryingU * bar)}, {static_cast<int>(VaryingV * bar)}};
+        Vec2i uv{static_cast<int>(VaryingU * bar), static_cast<int>(VaryingV * bar)};
         if (intensity < 0.f)
             return false;
         color = model->diffuse(uv) * intensity;

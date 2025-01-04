@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <initializer_list>
 #include <iostream>
+#include <type_traits>
 using uint8 = std::uint_fast8_t;
 template <typename T, uint8 row, uint8 col> class Matrix {
   public:
@@ -17,6 +18,11 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].begin()[j];
+    }
+    Matrix(std::initializer_list<T> list) {
+        static_assert(col == 1, "col must be 1");
+        std::transform(list.begin(), list.end(), data.begin(),
+                       [](const T &x) { return std::array<T, col>{x}; });
     }
     static Matrix merge(std::initializer_list<Matrix<T, row, 1>> list) {
         Matrix result{};
@@ -165,7 +171,7 @@ Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_
 
 template <typename T_, uint8 row_>
 Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
-    return {{ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0)},
-            {ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0)},
-            {ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)}};
+    return {ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0),
+            ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
+            ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};
 }
