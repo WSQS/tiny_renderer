@@ -34,7 +34,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.data[i][j];
     }
-    Matrix operator*(const int &a) const {
+    Matrix operator*(const T &a) const {
         Matrix result(*this);
         std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x * a; });
@@ -103,7 +103,6 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                 result += c;
         return result;
     }
-    auto GetPhi() { return 0; }
     static Matrix ParallelDot(Matrix a, Matrix b) {
         Matrix result{};
         std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),

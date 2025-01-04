@@ -27,7 +27,7 @@ class GouraudShader : public IShader {
         gl_Vertex = Vec3f{BuildAxis() * (gl_Vertex - CenterOfScreen)};
         gl_Vertex = (gl_Vertex + Vec3f{{0}, {0}, {1.f}}) / 2.f;
         gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{{width}, {height}, {depth}});
-        gl_Vertex = gl_Vertex * gl_Vertex.GetPhi();
+        gl_Vertex = gl_Vertex * GetPhi(gl_Vertex);
         return static_cast<Vec3i>(gl_Vertex); // transform it to screen coordinates
     }
 

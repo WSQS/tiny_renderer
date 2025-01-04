@@ -24,3 +24,8 @@ inline Matrix<float,3,3> BuildAxis()
     xyz[1] = (xyz[0] ^ xyz[2]).normalize();
     return Matrix<float,3,3>::merge({xyz[0], xyz[1], xyz[2]});
 }
+
+inline float GetPhi(Vec3f v) {
+    return 1.f/(1.f-v.data[2][0]/GetC());
+}
+

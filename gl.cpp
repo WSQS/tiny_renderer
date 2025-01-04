@@ -18,7 +18,7 @@ Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
 void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensity) {
     Vec2f Points2d[3], ScreenSize{{width / 2}, {height / 2}};
     for (int i = 0; i < 3; i++) {
-        points[i] = points[i] * points[i].GetPhi();
+        points[i] = points[i] * GetPhi(points[i]);
         Points2d[i] = static_cast<Vec2f>(points[i]);
     }
     // get the bounding box
@@ -53,7 +53,7 @@ void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensi
 void triangle(Vec3f *points, IShader *Shader, TGAImage &image, float *Z_Buff) {
     Vec2f Points2d[3], ScreenSize{{width / 2}, {height / 2}};
     for (int i = 0; i < 3; i++) {
-        points[i] = points[i] * points[i].GetPhi();
+        points[i] = points[i] * GetPhi(points[i]);
         Points2d[i] = static_cast<Vec2f>(points[i]);
     }
     // get the bounding box
