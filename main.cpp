@@ -18,14 +18,14 @@ class GouraudShader : public IShader {
 
 public:
     Vec3i vertex(int iface, int nthvert) override {
-        VaryingIntensity.get(nthvert, 0) =
-            std::max(0.f, model->normal(iface, nthvert) * light_dir);
+        VaryingIntensity.get(nthvert, 0) = std::max(0.f, model->normal(iface, nthvert) * light_dir);
         VaryingU.get(nthvert, 0) = static_cast<float>(model->uv(iface, nthvert).get(0, 0));
         VaryingV.get(nthvert, 0) = static_cast<float>(model->uv(iface, nthvert).get(1, 0));
         // get diffuse lighting intensity
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
         // TODO:待矩阵化
-        gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
+        // gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
+        gl_Vertex = BuildAxis() * (gl_Vertex << 1.f);
         // gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
         gl_Vertex = Matrix<float, 4, 4>{{0.5f, 0.f, 0.f, 0.f}, {0.f, 0.5f, 0.f, 0.f},
                         {0.f, 0.f, 0.5f, 0.5f}, {0.f, 0.f, 0.f, 1.f}} *
