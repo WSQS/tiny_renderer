@@ -11,6 +11,8 @@ private:
 	std::vector<Vec3f> norms_;
 	std::vector<Vec2f> uv_;
 	TGAImage diffusemap_;
+	TGAImage normalmap_;
+	TGAImage specularmap_;
 	void load_texture(std::string filename, const char *suffix, TGAImage &img);
 
 public:
@@ -19,6 +21,7 @@ public:
 	int nverts();
 	int nfaces();
 	Vec3f normal(int iface, int nvert);
+	float specular(Vec2f uvf);
 	Vec3f vert(int i);
 	Vec3f vert(int iface, int nvert);
 	Vec2i uv(int iface, int nvert);
