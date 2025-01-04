@@ -77,6 +77,9 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         result = std::sqrt(result);
         return *this / result;
     }
+    template <typename T_, uint8 row_>
+    friend Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml,
+                                         const Matrix<T_, row_, 1> &mr);
     Matrix operator^(const Matrix &m) const {
         Matrix result{*this};
         return result;
@@ -114,7 +117,8 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         return result;
     }
     static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a, b), c); }
-    static auto max(Matrix a, Matrix b) { Matrix result{};
+    static auto max(Matrix a, Matrix b) {
+        Matrix result{};
         std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
                        [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
                            std::array<T, col> result;
@@ -122,7 +126,8 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                                           [](const T &x, const T &y) { return std::max(x, y); });
                            return result;
                        });
-        return result; }
+        return result;
+    }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
 };
 
@@ -147,4 +152,11 @@ Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_
                 result.data[i][j] += ml.data[i][k] * mr.data[k][j];
     }
     return result;
+}
+
+template <typename T_, uint8 row_>
+Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
+    return {ml.data.get(1, 0) * mr.data.get(2, 0) - ml.data.get(2, 0) * mr.data.get(1, 0),
+            ml.data.get(2, 0) * mr.data.get(0, 0) - ml.data.get(0, 0) * mr.data.get(2, 0),
+            ml.data.get(0, 0) * mr.data.get(1, 0) - ml.data.get(1, 0) * ml.data.get(0, 0)};
 }
