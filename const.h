@@ -17,10 +17,10 @@ inline float GetC()
 
 inline Matrix<float,3,3> BuildAxis()
 {
-    static Vec3f u{0, 1, 0};
+    static Vec3f up{0, 1, 0};
     Vec3f xyz[3];
     xyz[2] = (eye - CenterOfScreen).normalize();
-    xyz[0] = (u ^ xyz[2]).normalize();
+    xyz[0] = (up ^ xyz[2]).normalize();
     xyz[1] = (xyz[0] ^ xyz[2]).normalize();
     return Matrix<float,3,3>::merge({xyz[0], xyz[1], xyz[2]});
 }
