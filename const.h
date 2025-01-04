@@ -8,16 +8,16 @@ const auto green = TGAColor(0, 255, 0, 255);
 constexpr int width = 800;
 constexpr int height = 800;
 constexpr int depth = 255;
-const Vec3f eye = Vec3f({1, 1, 2}) * 2, CenterOfScreen{0, 0, 0};
+constexpr  Vec3f eye = Vec3f({1, 1, 2}) * 2, CenterOfScreen{0, 0, 0};
 
 inline float GetC()
 {
     return (eye - CenterOfScreen) * (eye - CenterOfScreen) * depth;
 }
 
-inline Matrix<float,4,4> BuildAxis()
+constexpr  Matrix<float,4,4> model_view()
 {
-    static Vec3f up{0, 1, 0};
+    constexpr Vec3f up{0, 1, 0};
     Vec3f xyz[3];
     xyz[2] = (eye - CenterOfScreen).normalize();
     xyz[0] = (up ^ xyz[2]).normalize();

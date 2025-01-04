@@ -25,7 +25,7 @@ public:
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
         // TODO:待矩阵化
         // gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
-        gl_Vertex = BuildAxis() * (gl_Vertex << 1.f);
+        gl_Vertex = model_view() * (gl_Vertex << 1.f);
         // gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
         gl_Vertex = Matrix<float, 4, 4>{{0.5f, 0.f, 0.f, 0.f}, {0.f, 0.5f, 0.f, 0.f},
                         {0.f, 0.f, 0.5f, 0.5f}, {0.f, 0.f, 0.f, 1.f}} *
@@ -57,7 +57,7 @@ int main(const int argc, char **argv) {
         model = new Model("obj/african_head.obj");
     TGAImage image(width, height, TGAImage::RGB);
 
-    Matrix ModelView(BuildAxis());
+    Matrix ModelView(model_view());
     // std::cout << M << std::endl;
     // initialize Z Buffer
     const auto Z_Buffer = new float[width * height];

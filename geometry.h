@@ -12,13 +12,13 @@ public:
     std::array<std::array<T, col>, row> data{};
 
     Matrix() = default;
-    Matrix(const Matrix &m) { std::copy(m.data.begin(), m.data.end(), data.begin()); }
+    constexpr Matrix(const Matrix &m) { std::copy(m.data.begin(), m.data.end(), data.begin()); }
     Matrix(std::initializer_list<std::initializer_list<T>> list) {
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].begin()[j];
     }
-    Matrix(std::initializer_list<T> list) requires (col == 1) {
+    constexpr Matrix(std::initializer_list<T> list) requires (col == 1) {
         std::transform(list.begin(), list.end(), data.begin(),
             [](const T &x) { return std::array<T, col>{x}; });
     }
@@ -38,7 +38,7 @@ public:
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.data[i][j];
     }
-    Matrix operator*(const T &a) const {
+    constexpr Matrix operator*(const T &a) const {
         Matrix result(*this);
         std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x * a; });
@@ -56,7 +56,7 @@ public:
             });
         return result;
     }
-    Matrix operator-(const Matrix &m) const {
+    constexpr Matrix operator-(const Matrix &m) const {
         Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
             [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
@@ -79,7 +79,7 @@ public:
             });
         return result;
     }
-    Matrix normalize() {
+    constexpr Matrix normalize() {
         T result{};
         for (auto r : data)
             for (auto c : r)
