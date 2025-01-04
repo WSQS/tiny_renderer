@@ -8,7 +8,7 @@
 #include <type_traits>
 using uint8 = std::uint_fast8_t;
 template <typename T, uint8 row, uint8 col> class Matrix {
-  public:
+public:
     std::array<std::array<T, col>, row> data{};
 
     Matrix() = default;

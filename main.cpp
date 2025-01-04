@@ -16,7 +16,7 @@ class GouraudShader : public IShader {
     Vec3f VaryingU;
     Vec3f VaryingV;
 
-  public:
+public:
     Vec3i vertex(int iface, int nthvert) override {
         VaryingIntensity.get(nthvert, 0) =
             std::max(0.f, model->GetNorm(iface, nthvert) * light_dir);
