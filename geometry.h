@@ -23,11 +23,12 @@ template <typename T, uint8 row, uint8 col> class Matrix {
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.data[i][j];
     }
-    Matrix operator*(const int &a) {
-        std::for_each(data.begin(), data.end(), [a](std::array<T, col> &r) {
+    Matrix operator*(const int &a) const {
+        Matrix result{*this};
+        std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x * a; });
         });
-        return *this;
+        return result;
     }
     template <uint8 row_, uint8 col_>
     Matrix<T, row, col_> operator*(const Matrix<T, row_, col_> &a) const {
