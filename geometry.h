@@ -73,9 +73,10 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         T result{};
         for (auto r : data)
             for (auto c : r)
-                result += c*c;
+                result += c * c;
         result = std::sqrt(result);
-        return *this / result; }
+        return *this / result;
+    }
     Matrix operator^(const Matrix &m) const {
         Matrix result{*this};
         return result;
@@ -101,9 +102,27 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                        });
         return result;
     }
-    static auto min(Matrix a, Matrix b) { return a; }
+    static auto min(Matrix a, Matrix b) {
+        Matrix result{};
+        std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
+                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                                          [](const T &x, const T &y) { return std::min(x, y); });
+                           return result;
+                       });
+        return result;
+    }
     static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a, b), c); }
-    static auto max(Matrix a, Matrix b) { return a; }
+    static auto max(Matrix a, Matrix b) { Matrix result{};
+        std::transform(a.data.begin(), a.data.end(), b.data.begin(), result.data.begin(),
+                       [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), r2.begin(), result.begin(),
+                                          [](const T &x, const T &y) { return std::max(x, y); });
+                           return result;
+                       });
+        return result; }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
 };
 
