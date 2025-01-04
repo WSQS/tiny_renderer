@@ -25,8 +25,8 @@ public:
 	float specular(Vec2f uvf);
 	Vec3f vert(int i);
 	Vec3f vert(int iface, int nvert);
-	Vec2i uv(int iface, int nvert);
-	TGAColor diffuse(Vec2i uv);
+	Vec2f uv(int iface, int nvert);
+	TGAColor diffuse(Vec2f uv);
 	// Get face from index
 	std::vector<int> face(int idx);
 };

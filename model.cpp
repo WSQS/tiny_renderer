@@ -80,13 +80,12 @@ void Model::load_texture(std::string filename, const char *suffix, TGAImage &img
     }
 }
 
-TGAColor Model::diffuse(Vec2i uv) { return diffusemap_.get(uv.get(0, 0), uv.get(1, 0)); }
-
-Vec2i Model::uv(int iface, int nvert) {
-    int idx = faces_[iface][nvert].get(1, 0);
-    return Vec2i{static_cast<int>(uv_[idx].get(0, 0) * diffusemap_.get_width()),
-        static_cast<int>(uv_[idx].get(1, 0) * diffusemap_.get_height())};
+TGAColor Model::diffuse(Vec2f uv) {
+    return diffusemap_.get(
+        uv.get(0, 0) * diffusemap_.get_width(), uv.get(1, 0) * diffusemap_.get_height());
 }
+
+Vec2f Model::uv(int iface, int nvert) { return uv_[faces_[iface][nvert].get(1, 0)]; }
 
 Vec3f Model::normal(int iface, int nvert) {
     int idx = faces_[iface][nvert].get(2, 0);
@@ -94,11 +93,12 @@ Vec3f Model::normal(int iface, int nvert) {
 }
 
 Vec3f Model::normal(Vec2f uvf) {
-    Vec2i uv{static_cast<int>(uvf.get(0, 0)) * normalmap_.get_width(), static_cast<int>(uvf.get(1, 0)) * normalmap_.get_height()};
+    Vec2i uv{static_cast<int>(uvf.get(0, 0)) * normalmap_.get_width(),
+        static_cast<int>(uvf.get(1, 0)) * normalmap_.get_height()};
     TGAColor c = normalmap_.get(uv.get(0, 0), uv.get(1, 0));
     Vec3f res;
     for (int i = 0; i < 3; i++)
-        res.get(2-i,0) = (float)c.bgra[i] / 255.f * 2.f - 1.f;
+        res.get(2 - i, 0) = (float)c.bgra[i] / 255.f * 2.f - 1.f;
     return res;
 }
 
