@@ -21,6 +21,7 @@ public:
 	int nverts();
 	int nfaces();
 	Vec3f normal(int iface, int nvert);
+	Vec3f normal(Vec2f uvf);
 	float specular(Vec2f uvf);
 	Vec3f vert(int i);
 	Vec3f vert(int iface, int nvert);
