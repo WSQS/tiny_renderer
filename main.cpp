@@ -57,7 +57,7 @@ int main(const int argc, char **argv) {
         model = new Model("obj/african_head.obj");
     TGAImage image(width, height, TGAImage::RGB);
 
-    Matrix Matrix_XYZ(BuildAxis());
+    Matrix ModelView(BuildAxis());
     // std::cout << M << std::endl;
     // initialize Z Buffer
     const auto Z_Buffer = new float[width * height];

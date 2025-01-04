@@ -15,14 +15,22 @@ inline float GetC()
     return (eye - CenterOfScreen) * (eye - CenterOfScreen) * depth;
 }
 
-inline Matrix<float,3,3> BuildAxis()
+inline Matrix<float,4,4> BuildAxis()
 {
     static Vec3f up{0, 1, 0};
     Vec3f xyz[3];
     xyz[2] = (eye - CenterOfScreen).normalize();
     xyz[0] = (up ^ xyz[2]).normalize();
     xyz[1] = (xyz[0] ^ xyz[2]).normalize();
-    return Matrix<float,3,3>::merge({xyz[0], xyz[1], xyz[2]});
+    Matrix<float,4,4> Minv{};
+    Matrix<float,4,4> Tr{};
+    for (int i=0; i<3; i++) {
+        Minv.get(0,i) = xyz[0].get(i,0);
+        Minv.get(1,i) = xyz[1].get(i,0);
+        Minv.get(2,i) = xyz[2].get(i,0);
+        Tr.get(i,3) = -eye.get(i,0);
+    }
+    return Minv*Tr;
 }
 
 inline float GetPhi(Vec3f v) {
