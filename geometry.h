@@ -11,6 +11,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
     std::array<std::array<T, col>, row> data{};
 
     Matrix() = default;
+    Matrix(const Matrix &m) { std::copy(m.data.begin(), m.data.end(), data.begin()); }
     Matrix(std::array<std::array<T, col>, row> data) : data(data) {}
     Matrix(std::initializer_list<std::initializer_list<T>> list) {
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
@@ -32,7 +33,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                 data[i][j] = list.data[i][j];
     }
     Matrix operator*(const int &a) const {
-        Matrix result{*this};
+        Matrix result(*this);
         std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x * a; });
         });
@@ -43,15 +44,19 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                                             const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
-    Matrix operator/(const int &a) const {
-        Matrix result{*this};
-        std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
-            std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x / a; });
-        });
+    Matrix operator/(const T &a) const {
+        Matrix result(*this);
+        std::transform(result.data.begin(), result.data.end(), result.data.begin(),
+                       [a](const std::array<T, col> &r1) {
+                           std::array<T, col> result;
+                           std::transform(r1.begin(), r1.end(), result.begin(),
+                                          [a](const T &x) { return x / a; });
+                           return result;
+                       });
         return result;
     }
     Matrix operator-(const Matrix &m) const {
-        Matrix result{*this};
+        Matrix result(*this);
         std::transform(result.data.begin(), result.data.end(), m.data.begin(), result.data.begin(),
                        [](const std::array<T, col> &r1, const std::array<T, col> &r2) {
                            std::array<T, col> result;
