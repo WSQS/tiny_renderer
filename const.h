@@ -37,6 +37,10 @@ constexpr  Matrix<float,4,4> model_view()
     Tr.get(3,3) = 1;
     return Minv*Tr;
 }
+constexpr  Matrix<float,4,4> projection() {
+    return {{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f},
+                        {0.f, 0.f, 1.f, 1.f}, {0.f, 0.f, 0.f, 1.f}};
+}
 
 inline float GetPhi(Vec3f v) {
     return 1.f/(1.f-v.data[2][0]/GetC());
