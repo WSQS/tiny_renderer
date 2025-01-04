@@ -25,9 +25,8 @@ public:
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
         // TODO:待矩阵化
         // gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
-        gl_Vertex = model_view() * (gl_Vertex << 1.f);
         // gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
-        gl_Vertex = projection() * (gl_Vertex << 1.f)/2.f;
+        gl_Vertex = projection() * model_view() * (gl_Vertex << 1.f) /2;
         // gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{width, height, depth});
         gl_Vertex = Matrix<float, 4, 4>{{width, 0.f, 0.f, 0.f}, {0.f, height, 0.f, 0.f},
                         {0.f, 0.f, depth, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
