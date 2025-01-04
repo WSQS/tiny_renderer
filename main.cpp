@@ -19,7 +19,7 @@ class GouraudShader : public IShader {
 public:
     Vec3i vertex(int iface, int nthvert) override {
         VaryingIntensity.get(nthvert, 0) =
-            std::max(0.f, model->GetNorm(iface, nthvert) * light_dir);
+            std::max(0.f, model->normal(iface, nthvert) * light_dir);
         VaryingU.get(nthvert, 0) = static_cast<float>(model->uv(iface, nthvert).get(0, 0));
         VaryingV.get(nthvert, 0) = static_cast<float>(model->uv(iface, nthvert).get(1, 0));
         // get diffuse lighting intensity

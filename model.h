@@ -18,7 +18,7 @@ public:
 	~Model();
 	int nverts();
 	int nfaces();
-	Vec3f GetNorm(int iface, int nvert);
+	Vec3f normal(int iface, int nvert);
 	Vec3f vert(int i);
 	Vec3f vert(int iface, int nvert);
 	Vec2i uv(int iface, int nvert);

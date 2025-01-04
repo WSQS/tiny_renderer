@@ -114,7 +114,7 @@ Vec2i Model::uv(int iface, int nvert)
     return Vec2i{static_cast<int>(uv_[idx].get(0,0) * diffusemap_.get_width()), static_cast<int>(uv_[idx].get(1,0) * diffusemap_.get_height())};
 }
 
-Vec3f Model::GetNorm(int iface, int nvert)
+Vec3f Model::normal(int iface, int nvert)
 {
     int idx = faces_[iface][nvert].get(2,0);
     return norms_[idx].normalize();
