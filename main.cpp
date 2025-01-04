@@ -37,7 +37,11 @@ public:
 
     bool fragment(Vec3f bar, TGAColor &color) override {
         float intensity = VaryingIntensity * bar; // interpolate intensity for the current pixel
-        Vec2i uv{static_cast<int>(VaryingU * bar), static_cast<int>(VaryingV * bar)};
+        Vec2f uv{(VaryingU * bar),(VaryingV * bar)};
+        Vec3f n = model->normal(uv);
+        n = n.normalize();
+        Vec3f l = light_dir;
+        intensity = std::max(0.f, n * l);
         if (intensity < 0.f)
             return false;
         color = model->diffuse(uv) * intensity;

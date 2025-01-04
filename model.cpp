@@ -93,8 +93,8 @@ Vec3f Model::normal(int iface, int nvert) {
 }
 
 Vec3f Model::normal(Vec2f uvf) {
-    Vec2i uv{static_cast<int>(uvf.get(0, 0)) * normalmap_.get_width(),
-        static_cast<int>(uvf.get(1, 0)) * normalmap_.get_height()};
+    Vec2i uv{static_cast<int>(uvf.get(0, 0) * normalmap_.get_width()),
+        static_cast<int>(uvf.get(1, 0) * normalmap_.get_height())};
     TGAColor c = normalmap_.get(uv.get(0, 0), uv.get(1, 0));
     Vec3f res;
     for (int i = 0; i < 3; i++)
