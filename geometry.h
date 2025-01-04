@@ -54,10 +54,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         Matrix result{*this};
         return result;
     }
-
-    // TODO
     Matrix normalize() { return *this; }
-
     Matrix operator^(const Matrix &m) const {
         Matrix result{*this};
         return result;
