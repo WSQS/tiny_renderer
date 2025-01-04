@@ -143,12 +143,15 @@ public:
     template <typename T_, uint8 row_>
     friend Matrix<T_, row_, 1> operator^(
         const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
+    template <typename T_, uint8 row_>
+    friend Matrix<T_, row_ + 1, 1> operator<<(const Matrix<T_, row_, 1> &m, const T_ &t);
 };
 
 using Vec2f = Matrix<float, 2, 1>;
 using Vec2i = Matrix<int, 2, 1>;
 using Vec3f = Matrix<float, 3, 1>;
 using Vec3i = Matrix<int, 3, 1>;
+
 template <typename T_, uint8 row_>
 T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     T_ result = 0;
@@ -173,4 +176,13 @@ Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, ro
     return {ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0),
         ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
         ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};
+}
+
+template <typename T_, uint8 row_>
+Matrix<T_, row_ + 1, 1> operator<<(const Matrix<T_, row_, 1> &m, const T_ &t) {
+    Matrix<T_, row_ + 1, 1> result;
+    for (uint8 i = 0; i < row_; i++)
+        result.data[i][0] = m.data[i][0];
+    result.data[row_][0] = t;
+    return result;
 }
