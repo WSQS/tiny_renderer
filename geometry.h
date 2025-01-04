@@ -29,11 +29,11 @@ public:
                 result.data[i][j] = list.begin()[i].data[j][0];
         return result;
     }
-    template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) : data{} {
+    template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) requires (col == 1) {
         for (int i = 0; i < std::min(row, row_); i++)
             data[i][0] = m.data[i][0];
     }
-    template <typename T_> Matrix(Matrix<T_, row, col> list) : data{} {
+    template <typename T_> Matrix(Matrix<T_, row, col> list) {
         for (uint8 i = 0; i < row; i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.data[i][j];
