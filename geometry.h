@@ -167,5 +167,5 @@ template <typename T_, uint8 row_>
 Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     return {{ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0)},
             {ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0)},
-            {ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * ml.get(0, 0)}};
+            {ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)}};
 }
