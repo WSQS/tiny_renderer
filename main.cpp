@@ -1,4 +1,5 @@
 #include <cmath>
+#include <memory>
 #include <vector>
 // #include <iostream>
 #include "const.h"
@@ -56,15 +57,14 @@ int main(const int argc, char **argv) {
     const auto Z_Buffer = new float[width * height];
     for (int i = 0; i < width * height; i++)
         Z_Buffer[i] = std::numeric_limits<float>::min();
-    auto *shader = new GouraudShader;
+    auto shader = std::make_shared<GouraudShader>();
     for (int i = 0; i < model->nfaces(); i++) {
         Vec3f screen_coords[3];
         for (int j = 0; j < 3; j++)
             screen_coords[j] = static_cast<Vec3f>(shader->vertex(i, j));
-        triangle(screen_coords, shader, image, Z_Buffer);
+        triangle(screen_coords, shader.get(), image, Z_Buffer);
     }
     // image.flip_vertically(); // i want to have the origin at the left bottom corner of the image
     image.write_tga_file("output.tga");
-    delete model;
     return 0;
 }
