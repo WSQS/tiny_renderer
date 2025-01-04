@@ -22,7 +22,7 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         Matrix result{};
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
-                result.data[i][j] = list.begin()[i].data[j][0];
+                result.data[j][i] = list.begin()[i].data[j][0];
         return result;
     }
     template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) : data{} {
