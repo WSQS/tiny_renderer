@@ -84,11 +84,17 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         return result;
     }
     auto GetPhi() { return 0; }
-    static auto ParallelDot(Matrix a, Matrix b) { return a; }
+    static T ParallelDot(Matrix a, Matrix b) {
+        T result{};
+        for (uint8 i = 0; i < row; i++)
+            for (uint8 j = 0; j < col; j++)
+                result += a.data[i][j] * b.data[i][j];
+        return result;
+    }
     static auto min(Matrix a, Matrix b) { return a; }
-    static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a,b),c); }
+    static auto min(Matrix a, Matrix b, Matrix c) { return min(min(a, b), c); }
     static auto max(Matrix a, Matrix b) { return a; }
-    static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a,b),c); }
+    static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
 };
 
 using Vec2f = Matrix<float, 2, 1>;
