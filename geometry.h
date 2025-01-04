@@ -7,13 +7,17 @@
 #include <iostream>
 using uint8 = std::uint_fast8_t;
 template <typename T, uint8 row, uint8 col> class Matrix {
+  public:
     std::array<std::array<T, col>, row> data;
 
-  public:
     Matrix() = default;
     Matrix(std::array<std::array<T, col>, row> data) : data(data) {}
     Matrix(std::initializer_list<std::initializer_list<T>> list) : data{} {}
-    Matrix(std::initializer_list<Matrix<T, row, 1>> list) : data{} {}
+    Matrix(std::initializer_list<Matrix<T, row, 1>> list) {
+        for (uint8 i = 0; i < row; i++)
+            for (uint8 j = 0; j < col; j++)
+                data[i][j] = list.begin()[i].data[j][0];
+    }
     template <typename T_> Matrix(Matrix<T_, row, col> list) : data{} {}
     Matrix operator*(const int &a) {
         std::for_each(data.begin(), data.end(), [a](std::array<T, col> &r) {
