@@ -30,10 +30,11 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         });
         return result;
     }
-    template <uint8 row_, uint8 col_>
-    Matrix<T, row, col_> operator*(const Matrix<T, row_, col_> &a) const {
-        return {};
-    }
+    template <typename T_, uint8 row_, uint8 t_, uint8 col_>
+    friend Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml,
+                                            const Matrix<T_, t_, col_> &mr);
+    template <typename T_, uint8 row_>
+    friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) : data{} {}
     Matrix operator/(const int &a) {
         std::for_each(data.begin(), data.end(), [a](std::array<T, col> &r) {
@@ -41,9 +42,6 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         });
         return *this;
     }
-    template <typename T_, uint8 row_>
-    friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
-
     Matrix operator-(const Matrix &m) const {
         Matrix result{*this};
         return result;
@@ -81,5 +79,15 @@ T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     T_ result = 0;
     for (uint8 i = 0; i < row_; i++)
         result += ml.data[0][i] * mr.data[0][i];
+    return result;
+}
+
+template <typename T_, uint8 row_, uint8 t_, uint8 col_>
+Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr){
+    Matrix<T_, row_, col_> result;
+    for (uint8 i = 0; i < row_; i++)
+        for (uint8 j = 0; j < col_; j++)
+            for (uint8 k = 0; k < t_; k++)
+                result.data[i][j] += ml.data[i][k] * mr.data[k][j];
     return result;
 }
