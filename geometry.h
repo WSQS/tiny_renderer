@@ -21,8 +21,8 @@ template <typename T, uint8 row, uint8 col> class Matrix {
         });
         return *this;
     }
-    template<uint8 row_,uint8 col_>
-    Matrix<T,row,col_> operator*(const Matrix<T,row_,col_> &a) const {
+    template <uint8 row_, uint8 col_>
+    Matrix<T, row, col_> operator*(const Matrix<T, row_, col_> &a) const {
         return {};
     }
     template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) : data{} {}
