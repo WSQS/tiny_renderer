@@ -39,11 +39,12 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                                             const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
-    Matrix operator/(const int &a) {
-        std::for_each(data.begin(), data.end(), [a](std::array<T, col> &r) {
+    Matrix operator/(const int &a) const {
+        Matrix result{*this};
+        std::for_each(result.data.begin(), result.data.end(), [a](std::array<T, col> &r) {
             std::transform(r.begin(), r.end(), r.begin(), [a](T &x) { return x / a; });
         });
-        return *this;
+        return result;
     }
     Matrix operator-(const Matrix &m) const {
         Matrix result{*this};
