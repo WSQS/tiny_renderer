@@ -24,7 +24,7 @@ class GouraudShader : public IShader {
         // get diffuse lighting intensity
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
         // TODO:待矩阵化
-        gl_Vertex = Vec3f{BuildAxis() * (gl_Vertex - CenterOfScreen)};
+        gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
         gl_Vertex = (gl_Vertex + Vec3f{{0}, {0}, {1.f}}) / 2.f;
         gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{{width}, {height}, {depth}});
         gl_Vertex = gl_Vertex * GetPhi(gl_Vertex);
