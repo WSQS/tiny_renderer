@@ -22,5 +22,5 @@ inline Matrix<float,3,3> BuildAxis()
     xyz[2] = (eye - CenterOfScreen).normalize();
     xyz[0] = (u ^ xyz[2]).normalize();
     xyz[1] = (xyz[0] ^ xyz[2]).normalize();
-    return {xyz[0], xyz[1], xyz[2]};
+    return Matrix<float,3,3>::merge({xyz[0], xyz[1], xyz[2]});
 }
