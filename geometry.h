@@ -69,7 +69,13 @@ template <typename T, uint8 row, uint8 col> class Matrix {
                        });
         return result;
     }
-    Matrix normalize() { return *this / sum(); }
+    Matrix normalize() {
+        T result{};
+        for (auto r : data)
+            for (auto c : r)
+                result += c*c;
+        result = std::sqrt(result);
+        return *this / result; }
     Matrix operator^(const Matrix &m) const {
         Matrix result{*this};
         return result;
