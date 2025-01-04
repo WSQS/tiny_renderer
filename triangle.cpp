@@ -90,16 +90,19 @@ void triangle_zbuff(Vec3f *points, float *zbuff, TGAImage &image, TGAColor color
         points[i] = points[i] * phi;
     }
     Vec2i right_top{
-        {std::min(std::max(std::max(points[0].get(0, 0), points[1].get(0, 0)), points[2].get(0, 0)),
-                 float(width / 2))},
-        {std::min(std::max(std::max(points[0].get(1, 0), points[1].get(1, 0)), points[2].get(1, 0)),
-                 float(height / 2))}},
-        left_bottom{{std::max(std::min(std::min(points[0].get(0, 0), points[1].get(0, 0)),
-                                      points[2].get(0, 0)),
-                             -float(width / 2))},
-                    {std::max(std::min(std::min(points[0].get(1, 0), points[1].get(1, 0)),
-                                      points[2].get(1, 0)),
-                             -float(height / 2))}};
+        {static_cast<int>(std::min(
+            std::max(std::max(points[0].get(0, 0), points[1].get(0, 0)), points[2].get(0, 0)),
+            float(width / 2)))},
+        {static_cast<int>(std::min(
+            std::max(std::max(points[0].get(1, 0), points[1].get(1, 0)), points[2].get(1, 0)),
+            float(height / 2)))}},
+        left_bottom{
+            {static_cast<int>(std::max(
+                std::min(std::min(points[0].get(0, 0), points[1].get(0, 0)), points[2].get(0, 0)),
+                -float(width / 2)))},
+            {static_cast<int>(std::max(
+                std::min(std::min(points[0].get(1, 0), points[1].get(1, 0)), points[2].get(1, 0)),
+                -float(height / 2)))}};
     Vec3f p;
     for (int x = left_bottom.get(0, 0); x <= right_top.get(0, 0); x++) {
         for (int y = left_bottom.get(1, 0); y <= right_top.get(1, 0); y++) {
@@ -107,9 +110,10 @@ void triangle_zbuff(Vec3f *points, float *zbuff, TGAImage &image, TGAColor color
             if (k.get(0, 0) < 0 || k.get(1, 0) < 0 || k.get(2, 0) < 0)
                 continue;
             p = Vec3f{
-                {x}, {y},
+                {static_cast<float>(x)},
+                {static_cast<float>(y)},
                 {k * Vec3f{{points[0].get(2, 0)}, {points[1].get(2, 0)}, {points[2].get(2, 0)}}}};
-            Vec2i p0{{p.get(0, 0) + width / 2}, {p.get(1, 0) + height / 2}};
+            Vec2i p0{{static_cast<int>(p.get(0, 0)) + width / 2}, {static_cast<int>(p.get(1, 0)) + height / 2}};
             if (p.get(2, 0) >= zbuff[p0.get(0, 0) + p0.get(1, 0) * width]) {
                 zbuff[p0.get(0, 0) + p0.get(1, 0) * width] = p.get(2, 0);
                 image.set(p0.get(0, 0), p0.get(1, 0), color);
