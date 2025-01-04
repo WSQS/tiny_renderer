@@ -13,7 +13,7 @@ public:
 
     Matrix() = default;
     constexpr Matrix(const Matrix &m) { std::copy(m.data.begin(), m.data.end(), data.begin()); }
-    Matrix(std::initializer_list<std::initializer_list<T>> list) {
+    constexpr Matrix(std::initializer_list<std::initializer_list<T>> list) {
         for (uint8 i = 0; i < std::min(row, static_cast<uint8>(list.size())); i++)
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].begin()[j];
@@ -88,9 +88,9 @@ public:
         return *this / result;
     }
     template <typename T_, uint8 row_>
-    friend Matrix<T_, row_, 1> operator^(
+    friend constexpr Matrix<T_, row_, 1> operator^(
         const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
-    auto &get(uint8 i, uint8 j) { return data[i][j]; }
+    constexpr auto &get(uint8 i, uint8 j) { return data[i][j]; }
     auto get(uint8 i, uint8 j) const { return data[i][j]; }
     T sum() {
         T result{};
@@ -135,12 +135,12 @@ public:
     }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
     template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-    friend Matrix<T_, row_, col_> operator*(
+    friend constexpr  Matrix<T_, row_, col_> operator*(
         const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     template <typename T_, uint8 row_>
-    friend Matrix<T_, row_, 1> operator^(
+    friend constexpr Matrix<T_, row_, 1> operator^(
         const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
     template <typename T_, uint8 row_>
     friend Matrix<T_, row_ + 1, 1> operator<<(const Matrix<T_, row_, 1> &m, const T_ &t);
@@ -160,7 +160,7 @@ T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
 }
 
 template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr) {
+constexpr Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr) {
     Matrix<T_, row_, col_> result;
     for (uint8 i = 0; i < row_; i++) {
         for (uint8 j = 0; j < col_; j++)
@@ -171,7 +171,7 @@ Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_
 }
 
 template <typename T_, uint8 row_>
-Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
+constexpr Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     return {ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0),
         ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
         ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};
