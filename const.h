@@ -30,6 +30,11 @@ inline Matrix<float,4,4> BuildAxis()
         Minv.get(2,i) = xyz[2].get(i,0);
         Tr.get(i,3) = -eye.get(i,0);
     }
+    Minv.get(3,3) = 1;
+    Tr.get(0,0) = 1;
+    Tr.get(1,1) = 1;
+    Tr.get(2,2) = 1;
+    Tr.get(3,3) = 1;
     return Minv*Tr;
 }
 
