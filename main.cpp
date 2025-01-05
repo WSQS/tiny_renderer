@@ -39,14 +39,14 @@ public:
     }
 
     bool fragment(Vec3f bar, TGAColor &color) override {
-        float diff = VaryingIntensity * bar; // interpolate intensity for the current pixel
+        // float diff = VaryingIntensity * bar; // interpolate intensity for the current pixel
         Vec2f uv{VaryingU * bar, VaryingV * bar};
         Vec3f n = model->normal(uv);
         n = n.normalize();
         Vec3f l = light_dir;
         Vec3f r = (n * (n * l * 2.f) - l).normalize(); // reflected light
         float spec = pow(std::max(r.get(2, 0), 0.0f), model->specular(uv) / 5);
-        diff = std::max(0.f, n * l);
+        float diff = std::max(0.f, n * l);
         if (diff < 0.f)
             return false;
         for (int i = 0; i < 3; i++) {
