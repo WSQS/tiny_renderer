@@ -42,7 +42,7 @@ public:
         n = n.normalize();
         Vec3f l = light_dir;
         Vec3f r = (n * (n * l * 2.f) - l).normalize(); // reflected light
-        float spec = pow(std::max(r.get(2, 0), 0.0f), model->specular(uv)/5);
+        float spec = pow(std::max(r.get(2, 0), 0.0f), model->specular(uv) / 5);
         diff = std::max(0.f, n * l);
         if (diff < 0.f)
             return false;
