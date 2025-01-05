@@ -1,3 +1,4 @@
+// Copyright 2025 Sophomore Wang
 #pragma once
 #include <algorithm>
 #include <array>
@@ -18,7 +19,9 @@ public:
             for (uint8 j = 0; j < col; j++)
                 data[i][j] = list.begin()[i].begin()[j];
     }
-    constexpr Matrix(std::initializer_list<T> list) requires (col == 1) {
+    constexpr Matrix(std::initializer_list<T> list)
+        requires(col == 1)
+    {
         std::transform(list.begin(), list.end(), data.begin(),
             [](const T &x) { return std::array<T, col>{x}; });
     }
@@ -29,7 +32,10 @@ public:
                 result.data[i][j] = list.begin()[i].data[j][0];
         return result;
     }
-    template <uint8 row_> Matrix(const Matrix<T, row_, 1> m) requires (col == 1) {
+    template <uint8 row_>
+    Matrix(const Matrix<T, row_, 1> m)
+        requires(col == 1)
+    {
         for (int i = 0; i < std::min(row, row_); i++)
             data[i][0] = m.data[i][0];
     }
@@ -135,7 +141,7 @@ public:
     }
     static auto max(Matrix a, Matrix b, Matrix c) { return max(max(a, b), c); }
     template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-    friend constexpr  Matrix<T_, row_, col_> operator*(
+    friend constexpr Matrix<T_, row_, col_> operator*(
         const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr);
     template <typename T_, uint8 row_>
     friend T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr);
@@ -160,7 +166,8 @@ T_ operator*(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
 }
 
 template <typename T_, uint8 row_, uint8 t_, uint8 col_>
-constexpr Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr) {
+constexpr Matrix<T_, row_, col_> operator*(
+    const Matrix<T_, row_, t_> &ml, const Matrix<T_, t_, col_> &mr) {
     Matrix<T_, row_, col_> result;
     for (uint8 i = 0; i < row_; i++) {
         for (uint8 j = 0; j < col_; j++)
@@ -171,7 +178,8 @@ constexpr Matrix<T_, row_, col_> operator*(const Matrix<T_, row_, t_> &ml, const
 }
 
 template <typename T_, uint8 row_>
-constexpr Matrix<T_, row_, 1> operator^(const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
+constexpr Matrix<T_, row_, 1> operator^(
+    const Matrix<T_, row_, 1> &ml, const Matrix<T_, row_, 1> &mr) {
     return {ml.get(1, 0) * mr.get(2, 0) - ml.get(2, 0) * mr.get(1, 0),
         ml.get(2, 0) * mr.get(0, 0) - ml.get(0, 0) * mr.get(2, 0),
         ml.get(0, 0) * mr.get(1, 0) - ml.get(1, 0) * mr.get(0, 0)};

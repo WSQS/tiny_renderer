@@ -1,4 +1,6 @@
+// Copyright 2025 Sophomore Wang
 #include "gl.h"
+
 #include "const.h"
 #include "tgaimage.h"
 
@@ -6,9 +8,9 @@
 
 Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
     Vec3f x{pts[0].get(0, 0) - p.get(0, 0), pts[1].get(0, 0) - p.get(0, 0),
-            pts[2].get(0, 0) - p.get(0, 0)},
+        pts[2].get(0, 0) - p.get(0, 0)},
         y{pts[0].get(1, 0) - p.get(1, 0), pts[1].get(1, 0) - p.get(1, 0),
-          pts[2].get(1, 0) - p.get(1, 0)};
+            pts[2].get(1, 0) - p.get(1, 0)};
     Vec3f a = x ^ y;
     a = a / a.sum();
     return a;
@@ -42,9 +44,9 @@ void triangle(Vec3f *points, float *Z_Buff, TGAImage &image, const Vec3f intensi
                 Z_Buff[p0.get(0, 0) + p0.get(1, 0) * width] = Z;
                 // std::cout << k << '\t' << intensity << '\t' << inten << std::endl;
                 image.set(p0.get(0, 0), p0.get(1, 0),
-                          TGAColor(static_cast<unsigned char>(255 * inten),
-                                   static_cast<unsigned char>(255 * inten),
-                                   static_cast<unsigned char>(255 * inten), 255));
+                    TGAColor(static_cast<unsigned char>(255 * inten),
+                        static_cast<unsigned char>(255 * inten),
+                        static_cast<unsigned char>(255 * inten), 255));
             }
         }
     }
