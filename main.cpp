@@ -26,7 +26,7 @@ public:
         // TODO:待矩阵化
         // gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
         // gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
-        gl_Vertex = projection() * model_view() * (gl_Vertex << 1.f) /2;
+        gl_Vertex = projection() * model_view() * (gl_Vertex << 1.f) / 2;
         // gl_Vertex = Vec3f::ParallelDot(gl_Vertex, Vec3f{width, height, depth});
         gl_Vertex = Matrix<float, 4, 4>{{width, 0.f, 0.f, 0.f}, {0.f, height, 0.f, 0.f},
                         {0.f, 0.f, depth, 0.f}, {0.f, 0.f, 0.f, 1.f}} *
@@ -36,15 +36,20 @@ public:
     }
 
     bool fragment(Vec3f bar, TGAColor &color) override {
-        float intensity = VaryingIntensity * bar; // interpolate intensity for the current pixel
-        Vec2f uv{(VaryingU * bar),(VaryingV * bar)};
+        float diff = VaryingIntensity * bar; // interpolate intensity for the current pixel
+        Vec2f uv{VaryingU * bar, VaryingV * bar};
         Vec3f n = model->normal(uv);
         n = n.normalize();
         Vec3f l = light_dir;
-        intensity = std::max(0.f, n * l);
-        if (intensity < 0.f)
+        Vec3f r = (n * (n * l * 2.f) - l).normalize(); // reflected light
+        float spec = pow(std::max(r.get(2, 0), 0.0f), model->specular(uv)/5);
+        diff = std::max(0.f, n * l);
+        if (diff < 0.f)
             return false;
-        color = model->diffuse(uv) * intensity;
+        for (int i = 0; i < 3; i++) {
+            color.bgra[i] =
+                std::min<int>(5 + model->diffuse(uv).bgra[i] * (diff + spec * 0.6), 255);
+        }
         // color = TGAColor(255, 255, 255) * intensity; // well duh
         return true; // no, we do not discard this pixel
     }
