@@ -5,6 +5,8 @@
 #include "tgaimage.h"
 
 #include <memory>
+#include <algorithm>
+#include <utility>
 
 Vec3f barycentric_coord(const Vec3f *pts, const Vec2i p) {
     Vec3f x{pts[0].get(0, 0) - p.get(0, 0), pts[1].get(0, 0) - p.get(0, 0),

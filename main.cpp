@@ -1,6 +1,9 @@
+// Copyright 2025 Sophomore Wang
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <algorithm>
+#include <limits>
 // #include <iostream>
 #include "const.h"
 #include "geometry.h"
@@ -23,7 +26,7 @@ public:
         VaryingV.get(nthvert, 0) = static_cast<float>(model->uv(iface, nthvert).get(1, 0));
         // get diffuse lighting intensity
         Vec3f gl_Vertex{model->vert(iface, nthvert)}; // read the vertex from .obj file
-        // TODO:待矩阵化
+        // TODO(sophomore): 待矩阵化
         // gl_Vertex = BuildAxis() * (gl_Vertex - CenterOfScreen);
         // gl_Vertex = (gl_Vertex + Vec3f{0, 0, 1.f}) / 2.f;
         gl_Vertex = projection() * model_view() * (gl_Vertex << 1.f) / 2;

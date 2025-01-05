@@ -1,3 +1,4 @@
+// Copyright 2025 Sophomore Wang
 #include "model.h"
 #include <fstream>
 #include <iostream>
@@ -54,9 +55,9 @@ Model::Model(const char *filename) : verts_(), faces_(), norms_(), uv_(), diffus
 
 Model::~Model() {}
 
-int Model::nverts() { return (int)verts_.size(); }
+int Model::nverts() { return static_cast<int>(verts_.size()); }
 
-int Model::nfaces() { return (int)faces_.size(); }
+int Model::nfaces() { return static_cast<int>(faces_.size()); }
 
 std::vector<int> Model::face(int idx) {
     std::vector<int> face;
@@ -98,7 +99,7 @@ Vec3f Model::normal(Vec2f uvf) {
     TGAColor c = normalmap_.get(uv.get(0, 0), uv.get(1, 0));
     Vec3f res;
     for (int i = 0; i < 3; i++)
-        res.get(2 - i, 0) = (float)c.bgra[i] / 255.f * 2.f - 1.f;
+        res.get(2 - i, 0) = static_cast<float>(c.bgra[i]) / 255.f * 2.f - 1.f;
     return res;
 }
 

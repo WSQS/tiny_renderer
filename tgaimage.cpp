@@ -1,3 +1,4 @@
+// Copyright 2025 Sophomore Wang
 #include <iostream>
 #include <fstream>
 #include <string.h>
